@@ -11,14 +11,15 @@ from pieceMove import canPieceMoveThere
 p1 = "B"
 p2 = "R"
 currentPlayer = p1
+blankPiece = ["", ""]
 board = [
         [[p2, "R"], [p2, "Kn"], [p2, "B"], [p2, "K"], [p2, "Q"], [p2, "B"], [p2, "Kn"], [p2, "R"]],
         [[p2, "P"], [p2, "P"], [p2, "P"], [p2, "P"], [p2, "P"], [p2, "P"], [p2, "P"], [p2, "P"]],
-        [0, 0, 0, 0, 0, 0, 0, 0]
-        [0, 0, 0, 0, 0, 0, 0, 0]
-        [0, 0, 0, 0, 0, 0, 0, 0]
-        [0, 0, 0, 0, 0, 0, 0, 0]
-        [[p1, "P"], [p1, "P"], [p1, "P"], [p1, "P"], [p1, "P"], [p1, "P"], [p1, "P"], [p1, "P"], ]
+        [blankPiece, blankPiece, blankPiece, blankPiece, blankPiece, blankPiece, blankPiece, blankPiece],
+        [blankPiece, blankPiece, blankPiece, blankPiece, blankPiece, blankPiece, blankPiece, blankPiece],
+        [blankPiece, blankPiece, blankPiece, blankPiece, blankPiece, blankPiece, blankPiece, blankPiece],
+        [blankPiece, blankPiece, blankPiece, blankPiece, blankPiece, blankPiece, blankPiece, blankPiece],
+        [[p1, "P"], [p1, "P"], [p1, "P"], [p1, "P"], [p1, "P"], [p1, "P"], [p1, "P"], [p1, "P"], ],
         [[p1, "R"], [p1, "Kn"], [p1, "B"], [p1, "Q"], [p1, "K"], [p1, "B"], [p1, "Kn"], [p1, "R"]]
         ]
 
@@ -26,28 +27,38 @@ def movePiece(fromPosExternal, toPosExternal):
     """ fromPosExternal: (Letter, Number) coord where piece to move currently is
         toPos: (Letter, NUmber) coord where piece should be moved to
         returns false if fromPos doesnt have a piece, or it can't move to toPos"""
-
-    if (!validCoord(fromPosExternal)
-        or !validCoord(toPosExternal)
+    
+    if (not validCoord(fromPosExternal)
+        or not validCoord(toPosExternal)
         or isSameCoord(fromPosExternal, toPosExternal)):
+        print("weird cells provided")
         return False
     
     fromPos = getNumCoord(fromPosExternal)
     toPos = getNumCoord(toPosExternal)
 
     if (isEmptyCell(fromPos)):
+        print("trying to move empty cell")
         return False
     
     moveMe = getPieceAtPos(fromPos)
-    if (!isYourTurn(moveMe)):
+    if (not isYourTurn(moveMe)):
+        print("not your turn")
         return False
     """at this point we know that a valid piece was chosen to be moved, now we find out if we can"""
 
-    if (!isValidMove(moveMe, fromPos, toPos)):
+    if (not isValidMove(moveMe, fromPos, toPos)):
+        print("move wont work")
         return False
     
-    """we now know that the move is a valid one! Time to execute it"""
-    
+    """at this point, we know we're looking at a piece to move,
+    we know we have a valid place it can move,
+    we know it's able to move there
+    so, we move it"""
+
+    moveMyPiece(moveMe, fromPos, toPos)
+
+    return True
 
 def validCoord(pos):
     if (pos[0] in ["A", "B", "C", "D", "E", "F", "G", "H"]
@@ -57,8 +68,8 @@ def validCoord(pos):
     return False
 
 def isSameCoord(extPos1, extPos2):
-    return extPos1[0] == extPos2[0]
-            and extPos1[1] == extPos2[1]
+    return extPos1[0] == extPos2[0] \
+        and extPos1[1] == extPos2[1]
 
 def getNumCoord(pos):
     """converts (Letter, Number) pos into (num, num) coord
@@ -78,5 +89,9 @@ def isYourTurn(piece):
     return piece[0] == currentPlayer
 
 def isValidMove(piece, fromPos, toPos):
-    return (isEmptyCell(toPos) or toPos[0] != fromPos[0])
+    return (isEmptyCell(toPos) or toPos[0] != fromPos[0]) \
         and canPieceMoveThere(board, piece, fromPos, toPos)
+
+def moveMyPiece(piece, fromPos, toPos):
+    board[toPos[0]][toPos[1]] = piece
+    board[fromPos[0]][fromPos[1]] = blankPiece

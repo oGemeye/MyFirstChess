@@ -1,11 +1,13 @@
+from pieceController import board, movePiece
 from boardDisplay import printBoard
 
 print("This is my game board :)")
 
-printBoard()
+printBoard(board)
 
-# print("and now the other way:")
+print("Mock turn 1, Blue, G1 to F1")
 
-# from pieceController import board
+didMove = movePiece(["G", 1], ["F", 1])
 
-# print("done!")
+print(f"Moved?: {didMove}")
+printBoard(board)

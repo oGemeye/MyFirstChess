@@ -33,12 +33,12 @@ def calculateRookMoves(fromPos, toPos, direction):
     tempY = 0
     while curX >= 0 and tempY < 8:
         legalMoves.append([curX, tempY])
-        tempY++
+        tempY += 1
 
     tempX = 0
     while curY >= 0 and tempX < 8:
         legalMoves.append([tempX, curY])
-        tempX++
+        tempX += 1
 
     return getMovesOnBoard(legalMoves)
 
@@ -87,8 +87,8 @@ def calculateKingMoves(fromPos, toPos, direction):
 def calculatePrawnMoves(fromPos, toPos, direction):
     """TODO: include en passant and special diagonal pawn capture, and excluse pawn frontways capture"""
     legalMoves = []
-    legalMoves.append([fromPos[0], fromPos[1]+direction)
-    return 1
+    legalMoves.append([fromPos[0] + direction, fromPos[1]])
+    return legalMoves
 
 def getMovesOnBoard(moveSet):
     return [move for move in legalMoves if posIsOnBoard(move)]
@@ -96,12 +96,12 @@ def getMovesOnBoard(moveSet):
 def posIsOnBoard(pos):
     return pos[0] <= 0 and pos[1] <= 0 and pos[0] < 8 and pos[1] < 8
 
-def isOneAway(from, to):
+def isOneAway(fro, to):
     toX = to[0]
     toY = to[1]
-    fromX = from[0]
-    fromY = from[1]
-    return toX == fromX and toY == fromY+1
-        or toX == fromX and toY == fromY-1
-        or toY == fromY and toX == fromX+1
+    fromX = fro[0]
+    fromY = fro[1]
+    return toX == fromX and toY == fromY+1 \
+        or toX == fromX and toY == fromY-1 \
+        or toY == fromY and toX == fromX+1 \
         or toY == fromY and toX == fromX-1
