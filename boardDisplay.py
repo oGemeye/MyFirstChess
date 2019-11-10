@@ -43,8 +43,6 @@ def printCellBorder():
 
 def printFromBoard(board, x, y):
     pieceName = board[x][y][1]
-    # print(f"board is {board}")
-    # print(f"Piece is '{pieceName}'")
     func = pickPieceFromBoard(pieceName)
     func()
 

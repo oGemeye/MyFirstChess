@@ -7,10 +7,13 @@ bottom right coord is (x, y) = (7, 7) internally, H8 externally
 """
 
 from pieceMove import canPieceMoveThere
+from moveValidator import validCoord
 
 p1 = "B"
 p2 = "R"
 currentPlayer = p1
+turnCount = 1
+gameOver = False
 blankPiece = ["", ""]
 board = [
         [[p2, "R"], [p2, "Kn"], [p2, "B"], [p2, "K"], [p2, "Q"], [p2, "B"], [p2, "Kn"], [p2, "R"]],
@@ -58,14 +61,10 @@ def movePiece(fromPosExternal, toPosExternal):
 
     moveMyPiece(moveMe, fromPos, toPos)
 
+    cleanUpTurn();   
+
     return True
 
-def validCoord(pos):
-    if (pos[0] in ["A", "B", "C", "D", "E", "F", "G", "H"]
-        and
-        pos[1] in [1, 2, 3, 4, 5, 6, 7, 8]):
-        return True
-    return False
 
 def isSameCoord(extPos1, extPos2):
     return extPos1[0] == extPos2[0] \
@@ -93,5 +92,37 @@ def isValidMove(piece, fromPos, toPos):
         and canPieceMoveThere(board, piece, fromPos, toPos)
 
 def moveMyPiece(piece, fromPos, toPos):
+    """if the piece being taken over is a kind, the game is over
+    regardless, move the piece"""
+    toBeCaptured = board[toPos[0]][toPos[1]]
+    gameOver = isKingPiece(toBeCaptured)
+
     board[toPos[0]][toPos[1]] = piece
     board[fromPos[0]][fromPos[1]] = blankPiece
+
+def isKingPiece(piece):
+    return piece[1] == "K"
+
+def cleanUpTurn():
+    global turnCount
+    turnCount += 1
+    swapPlayer();
+
+def swapPlayer():
+    global currentPlayer
+    if currentPlayer is p1:
+        currentPlayer = p2
+    else:
+        currentPlayer = p1
+
+def getCurrentPlayerString():
+    if currentPlayer is p1:
+        return "Blue"
+    else:
+        return "Red"
+
+def getCurrentTurn():
+    return turnCount
+
+def isGameOver():
+    return gameOver
