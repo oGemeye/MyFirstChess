@@ -1,13 +1,13 @@
 """
 controls pieces in an 8x8 board
-top left coord is (x, y) = (0, 0) internally, A1 externally
+top left coord is (x, y) = (0, 0) internally, A1 externally, found at board[y][x]
 top right coord is (x, y) = (0, 7) internally, A8 externally
 bottom left coord is (x, y) = (7, 0) internally, H1 externally
 bottom right coord is (x, y) = (7, 7) internally, H8 externally
 """
 
 from pieceMove import canPieceMoveThere
-from moveValidator import validCoord
+from moveValidator import validCoord, getNumCoord
 
 p1 = "B"
 p2 = "R"
@@ -39,12 +39,12 @@ def movePiece(fromPosExternal, toPosExternal):
     
     fromPos = getNumCoord(fromPosExternal)
     toPos = getNumCoord(toPosExternal)
-
     if (isEmptyCell(fromPos)):
         print("trying to move empty cell")
         return False
     
     moveMe = getPieceAtPos(fromPos)
+    print(moveMe)
     if (not isYourTurn(moveMe)):
         print("not your turn")
         return False
@@ -70,15 +70,8 @@ def isSameCoord(extPos1, extPos2):
     return extPos1[0] == extPos2[0] \
         and extPos1[1] == extPos2[1]
 
-def getNumCoord(pos):
-    """converts (Letter, Number) pos into (num, num) coord
-    A = 0, ..., H = 7"""
-    x = ord(pos[0]) - 65
-    y = pos[1] - 1
-    return [x, y]
-
 def getPieceAtPos(pos):
-    return board[pos[0]][pos[1]]
+    return board[pos[1]][pos[0]]
 
 def isEmptyCell(pos):
     """checks if the cell at x = pos[0], y = pos[1] is empty"""
@@ -88,17 +81,18 @@ def isYourTurn(piece):
     return piece[0] == currentPlayer
 
 def isValidMove(piece, fromPos, toPos):
-    return (isEmptyCell(toPos) or toPos[0] != fromPos[0]) \
+    print(f'isEmpty: {isEmptyCell(toPos)}, {toPos[0] != fromPos[0]}, canMove: {canPieceMoveThere(board, piece, fromPos, toPos)}')
+    return ((not isEmptyCell(fromPos)) or toPos[0] != fromPos[0]) \
         and canPieceMoveThere(board, piece, fromPos, toPos)
 
 def moveMyPiece(piece, fromPos, toPos):
     """if the piece being taken over is a kind, the game is over
     regardless, move the piece"""
-    toBeCaptured = board[toPos[0]][toPos[1]]
+    toBeCaptured = board[toPos[1]][toPos[0]]
     gameOver = isKingPiece(toBeCaptured)
 
-    board[toPos[0]][toPos[1]] = piece
-    board[fromPos[0]][fromPos[1]] = blankPiece
+    board[toPos[1]][toPos[0]] = piece
+    board[fromPos[1]][fromPos[0]] = blankPiece
 
 def isKingPiece(piece):
     return piece[1] == "K"

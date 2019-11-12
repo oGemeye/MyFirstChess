@@ -14,3 +14,4 @@ Current goal: backend complete
     -   add a nicer log, should include what piece moved, where it went, if it ate a piece
     -   add advanced moves like en pessante (how spell this shit), castling, pawn to queen swap
     -   remove messy global variables from pieceController.py
+    -   refactor the coordinate system - it's really confusing right now

@@ -13,3 +13,13 @@ def validInput(move):
 
 def convertToCoord(move):
     return (move[0], int(move[1]))
+
+def getNumCoord(pos):
+    """converts (Letter, Number) pos into (num, num) coord
+    A = 0, ..., H = 7"""
+    x = pos[1] - 1
+    y = ord(pos[0]) - 65
+    return [x, y]
+
+def addCoord(coordList, x, y):
+    coordList.append([y, x])
