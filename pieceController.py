@@ -27,8 +27,8 @@ board = [
         ]
 
 def movePiece(fromPosExternal, toPosExternal):
-    """ fromPosExternal: (Letter, Number) coord where piece to move currently is
-        toPos: (Letter, NUmber) coord where piece should be moved to
+    """ fromPosExternal: (CHAR, INT) coord where piece to move currently is
+        toPos: (CHAR, INT) coord where piece should be moved to
         returns false if fromPos doesnt have a piece, or it can't move to toPos"""
     
     if (not validCoord(fromPosExternal)
@@ -37,20 +37,20 @@ def movePiece(fromPosExternal, toPosExternal):
         print("weird cells provided")
         return False
     
-    fromPos = getNumCoord(fromPosExternal)
-    toPos = getNumCoord(toPosExternal)
-    if (isEmptyCell(fromPos)):
+    fromCoord = getNumCoord(fromPosExternal)
+    toCoord = getNumCoord(toPosExternal)
+    if (isEmptyCell(fromCoord)):
         print("trying to move empty cell")
         return False
     
-    moveMe = getPieceAtPos(fromPos)
+    moveMe = getPieceAtPos(fromCoord)
     print(moveMe)
     if (not isYourTurn(moveMe)):
         print("not your turn")
         return False
     """at this point we know that a valid piece was chosen to be moved, now we find out if we can"""
 
-    if (not isValidMove(moveMe, fromPos, toPos)):
+    if (not isValidMove(moveMe, fromCoord, toCoord)):
         print("move wont work")
         return False
     
@@ -59,7 +59,7 @@ def movePiece(fromPosExternal, toPosExternal):
     we know it's able to move there
     so, we move it"""
 
-    moveMyPiece(moveMe, fromPos, toPos)
+    moveMyPiece(moveMe, fromCoord, toCoord)
 
     cleanUpTurn();   
 
@@ -71,7 +71,8 @@ def isSameCoord(extPos1, extPos2):
         and extPos1[1] == extPos2[1]
 
 def getPieceAtPos(pos):
-    return board[pos[1]][pos[0]]
+    '''Checks if a piece exists at the Coordinate provided'''
+    return board[pos.y][pos.x]
 
 def isEmptyCell(pos):
     """checks if the cell at x = pos[0], y = pos[1] is empty"""

@@ -6,6 +6,16 @@ log = []
 
 print("This is my game board :)")
 
+def doATurnAndCheckGameOver():
+    turnDone = False
+    while not turnDone:
+        nextMove = requestTurn(getCurrentTurn(), getCurrentPlayerString())
+        turnDone = movePiece(nextMove[0], nextMove[1])
+    
+    logAndReportMove(nextMove[0], nextMove[1])
+    printBoard(board)
+    return isGameOver()
+
 def logAndReportMove(fromPos, toPos):
     newLog = f'T{getCurrentTurn()}, {getCurrentPlayerString()}: {fromPos} -> {toPos}'
     print(newLog)
@@ -25,11 +35,9 @@ def logMove(newLog):
 printBoard(board)
 gameOver = False
 while not gameOver:
-    turnDone = False
-    while not turnDone:
-        nextMove = requestTurn(getCurrentTurn(), getCurrentPlayerString())
-        turnDone = movePiece(nextMove[0], nextMove[1])
-    
-    logAndReportMove(nextMove[0], nextMove[1])
-    printBoard(board)
-    gameOver = isGameOver()
+    try:
+        gameOver = doATurnAndCheckGameOver()
+    except KeyboardInterrupt:
+        break
+    except:
+        raise

@@ -35,4 +35,4 @@ def parseMove(move):
 def confirmMoves(fromPos, toPos):
     confirmation = f'Are you sure you want to move the piece at {fromPos} to {toPos}? [Y/N] '
     response = input(confirmation)
-    return response == 'Y'
+    return response.upper() == 'Y' or response.upper() == 'YES'
