@@ -1,6 +1,7 @@
 from moveValidator import addCoord
+from grid import pieceAt, positionInGrid
 
-def canPieceMoveThere(board, piece, fromPos, toPos):
+def canPieceMoveThere(piece, fromPos, toPos):
     """takes in an 8x8 board, a (Player, Type) piece, a (num, num) fromPos and toPos
     we assume that the toPos is empty on the board, and fromPos has our piece
     we could find this all out ourselves but look who cares"""
@@ -10,7 +11,10 @@ def canPieceMoveThere(board, piece, fromPos, toPos):
     legalMoves = legalMovesFunc(fromPos, toPos, pieceOrientation)
     print(toPos)
     print(legalMoves)
-    return [toPos[1], toPos[0]] in legalMoves
+    return posInMoveset(toPos, legalMoves)
+
+def posInMoveset(pos, moveset):
+    return any(move[0] == pos.x and move[1] == pos.y for move in moveset)
 
 def getPieceOrientation(piece):
     """declares what we add to a piece's X coord to create legal moves
@@ -31,8 +35,8 @@ def pieceMoveTypes(pieceType):
 
 def calculateRookMoves(fromPos, toPos, direction):
     legalMoves = []
-    curX = fromPos[0]
-    curY = fromPos[1]
+    curX = fromPos.x
+    curY = fromPos.y
     tempY = 0
     while curX >= 0 and tempY < 8:
         addCoord(legalMoves, curX, tempY)
@@ -89,18 +93,6 @@ def calculateKingMoves(fromPos, toPos, direction):
     kinglyMoves = [move for move in legalMoves if isOneAway(fromPos, move)]
     return getMovesOnBoard(kinglyMoves)
 
-def calculatePrawnMoves(fromPos, toPos, direction):
-    """TODO: include en passant and special diagonal pawn capture, and excluse pawn frontways capture"""
-    legalMoves = []
-    addCoord(legalMoves, fromPos[0], fromPos[1] + direction)
-    return legalMoves
-
-def getMovesOnBoard(moveSet):
-    return [move for move in moveSet if posIsOnBoard(move)]
-
-def posIsOnBoard(pos):
-    return pos[0] <= 0 and pos[1] <= 0 and pos[0] < 8 and pos[1] < 8
-
 def isOneAway(fro, to):
     toX = to[0]
     toY = to[1]
@@ -110,3 +102,12 @@ def isOneAway(fro, to):
         or toX == fromX and toY == fromY-1 \
         or toY == fromY and toX == fromX+1 \
         or toY == fromY and toX == fromX-1
+
+def calculatePrawnMoves(fromPos, toPos, direction):
+    """TODO: include en passant and special diagonal pawn capture, and excluse pawn frontways capture"""
+    legalMoves = []
+    addCoord(legalMoves, fromPos.x, fromPos.y + direction)
+    return legalMoves
+
+def getMovesOnBoard(moveSet):
+    return [move for move in moveSet if positionInGrid(move)]

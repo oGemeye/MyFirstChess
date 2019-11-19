@@ -1,5 +1,6 @@
 from playerIO import requestTurn
-from pieceController import board, movePiece, getCurrentTurn, getCurrentPlayerString, isGameOver
+from pieceController import movePiece, getCurrentTurn, getCurrentPlayerString, isGameOver
+from grid import getBoard
 from boardDisplay import printBoard
 
 log = []
@@ -13,7 +14,7 @@ def doATurnAndCheckGameOver():
         turnDone = movePiece(nextMove[0], nextMove[1])
     
     logAndReportMove(nextMove[0], nextMove[1])
-    printBoard(board)
+    printBoard(getBoard())
     return isGameOver()
 
 def logAndReportMove(fromPos, toPos):
@@ -32,7 +33,7 @@ def reportGameOver():
 def logMove(newLog):
     log.append(newLog)
 
-printBoard(board)
+printBoard(getBoard())
 gameOver = False
 while not gameOver:
     try:

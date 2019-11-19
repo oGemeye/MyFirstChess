@@ -24,7 +24,7 @@ def getNumCoord(pos):
     return Coordinate(x, y)
 
 def addCoord(coordList, x, y):
-    coordList.append([y, x])
+    coordList.append([x, y])
 
 class Coordinate:
     '''
@@ -40,4 +40,4 @@ class Coordinate:
         self.y = y
     
     def __str__(self):
-        return f'({x}, {y})'
+        return f'({self.x}, {self.y})'

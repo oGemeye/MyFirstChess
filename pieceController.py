@@ -7,24 +7,12 @@ bottom right coord is (x, y) = (7, 7) internally, H8 externally
 """
 
 from pieceMove import canPieceMoveThere
-from moveValidator import validCoord, getNumCoord
+from moveValidator import validCoord, getNumCoord, Coordinate
+from grid import p1, p2, blankPiece, pieceAt, assignToPieceAt, removePieceAt#, board
 
-p1 = "B"
-p2 = "R"
 currentPlayer = p1
 turnCount = 1
 gameOver = False
-blankPiece = ["", ""]
-board = [
-        [[p2, "R"], [p2, "Kn"], [p2, "B"], [p2, "K"], [p2, "Q"], [p2, "B"], [p2, "Kn"], [p2, "R"]],
-        [[p2, "P"], [p2, "P"], [p2, "P"], [p2, "P"], [p2, "P"], [p2, "P"], [p2, "P"], [p2, "P"]],
-        [blankPiece, blankPiece, blankPiece, blankPiece, blankPiece, blankPiece, blankPiece, blankPiece],
-        [blankPiece, blankPiece, blankPiece, blankPiece, blankPiece, blankPiece, blankPiece, blankPiece],
-        [blankPiece, blankPiece, blankPiece, blankPiece, blankPiece, blankPiece, blankPiece, blankPiece],
-        [blankPiece, blankPiece, blankPiece, blankPiece, blankPiece, blankPiece, blankPiece, blankPiece],
-        [[p1, "P"], [p1, "P"], [p1, "P"], [p1, "P"], [p1, "P"], [p1, "P"], [p1, "P"], [p1, "P"], ],
-        [[p1, "R"], [p1, "Kn"], [p1, "B"], [p1, "Q"], [p1, "K"], [p1, "B"], [p1, "Kn"], [p1, "R"]]
-        ]
 
 def movePiece(fromPosExternal, toPosExternal):
     """ fromPosExternal: (CHAR, INT) coord where piece to move currently is
@@ -72,7 +60,7 @@ def isSameCoord(extPos1, extPos2):
 
 def getPieceAtPos(pos):
     '''Checks if a piece exists at the Coordinate provided'''
-    return board[pos.y][pos.x]
+    return pieceAt(pos.x, pos.y)
 
 def isEmptyCell(pos):
     """checks if the cell at x = pos[0], y = pos[1] is empty"""
@@ -82,18 +70,19 @@ def isYourTurn(piece):
     return piece[0] == currentPlayer
 
 def isValidMove(piece, fromPos, toPos):
-    print(f'isEmpty: {isEmptyCell(toPos)}, {toPos[0] != fromPos[0]}, canMove: {canPieceMoveThere(board, piece, fromPos, toPos)}')
-    return ((not isEmptyCell(fromPos)) or toPos[0] != fromPos[0]) \
-        and canPieceMoveThere(board, piece, fromPos, toPos)
+    print(f'isEmpty: {isEmptyCell(toPos)}, {toPos.y != fromPos.y}, canMove: {canPieceMoveThere(piece, fromPos, toPos)}')
+    return ((not isEmptyCell(fromPos)) or toPos.y != fromPos.y) \
+        and canPieceMoveThere(piece, fromPos, toPos)
 
 def moveMyPiece(piece, fromPos, toPos):
     """if the piece being taken over is a kind, the game is over
     regardless, move the piece"""
-    toBeCaptured = board[toPos[1]][toPos[0]]
+    print(f'frompos is {fromPos}, topos is {toPos}')
+    toBeCaptured = pieceAt(toPos.x, toPos.y)
     gameOver = isKingPiece(toBeCaptured)
 
-    board[toPos[1]][toPos[0]] = piece
-    board[fromPos[1]][fromPos[0]] = blankPiece
+    assignToPieceAt(toPos.x, toPos.y, piece)
+    removePieceAt(fromPos.x, fromPos.y)
 
 def isKingPiece(piece):
     return piece[1] == "K"

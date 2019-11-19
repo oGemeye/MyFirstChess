@@ -1,3 +1,5 @@
+from grid import pieceAt
+
 def printBoard(board):
     printHeader()
     for x in range(8):
@@ -24,9 +26,15 @@ def printHorizontalSection():
         printCellBorder()
     print("-")
 
+def printCellBorder():
+    print("-----", end="")
+
+def printFromBoard(board, x, y):
+    pieceName = pieceAt(x, y)[1]
+    func = pickPieceFromBoard(pieceName)
+    func()
+
 def pickPieceFromBoard(pieceName):
-    """x is top to bottom, 0-7
-    y is left to right, 0-7"""
     switch = {
         'R': printRook,
         'Kn': printKnight,
@@ -37,24 +45,6 @@ def pickPieceFromBoard(pieceName):
         '': printBlank
     }
     return switch[pieceName]
-
-def printCellBorder():
-    print("-----", end="")
-
-def printFromBoard(board, x, y):
-    pieceName = board[x][y][1]
-    func = pickPieceFromBoard(pieceName)
-    func()
-
-def printCellContent(x, y):
-    if x in [0, 7]:
-        func = piecePicker(y)
-        if func is not None:
-            func()
-    elif x in [1, 6]:
-        printPawn()
-    elif x in [2, 3, 4, 5]:
-        print("|    ", end="")
 
 def printRook():
     print(" R  |", end="")
