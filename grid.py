@@ -23,7 +23,7 @@ def removePieceAt(x, y):
     board[y][x] = blankPiece
 
 def positionInGrid(x, y):
-    return x <= 0 and y <= 0 and x < 8 and y < 8
+    return x >= 0 and y >= 0 and x < 8 and y < 8
 
 def getBoard():
     return board

@@ -2,9 +2,9 @@ from grid import pieceAt
 
 def printBoard(board):
     printHeader()
-    for x in range(8):
-        printSider(x)
-        for y in range(8):
+    for y in range(8):
+        printSider(y)
+        for x in range(8):
             printFromBoard(board, x, y)
         print('')
         printHorizontalSection()

@@ -1,6 +1,8 @@
 from moveValidator import addCoord
 from grid import pieceAt, positionInGrid
 
+from math import sqrt
+
 def canPieceMoveThere(piece, fromPos, toPos):
     """takes in an 8x8 board, a (Player, Type) piece, a (num, num) fromPos and toPos
     we assume that the toPos is empty on the board, and fromPos has our piece
@@ -50,24 +52,16 @@ def calculateRookMoves(fromPos, toPos, direction):
     return getMovesOnBoard(legalMoves)
 
 def calculateKnightMoves(fromPos, toPos, direction):
-    """TODO: write this algo to be intelligent instead of just listing the 8 possible transforms"""
     legalMoves = []
-    curX = fromPos[0]
-    curY = fromPos[1]
+    curX = fromPos.x
+    curY = fromPos.y
 
-    addCoord(legalMoves, curX+1, curY-2)
-    addCoord(legalMoves, curX+2, curY-1)
+    for x in [curX-2, curX-1, curX+1, curX+2]:
+        for y in [curY-2, curY-1, curY+1, curY+2]:
+            if positionInGrid(x, y) and ((x-curX)**2) + ((y-curY)**2) == 5:
+                addCoord(legalMoves, x, y)
 
-    addCoord(legalMoves, curX+2, curY+1)
-    addCoord(legalMoves, curX+1, curY+2)
-
-    addCoord(legalMoves, curX-1, curY+2)
-    addCoord(legalMoves, curX-2, curY+1)
-
-    addCoord(legalMoves, curX-2, curY-1)
-    addCoord(legalMoves, curX-1, curY-2)
-
-    return getMovesOnBoard(legalMoves)
+    return legalMoves
 
 def calculateBishopMoves(fromPos, toPos, direction):
     legalMoves = []
