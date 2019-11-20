@@ -1,3 +1,5 @@
+from grid import positionInGrid
+
 validLetters = ["A", "B", "C", "D", "E", "F", "G", "H"]
 validNumbers = [1, 2, 3, 4, 5, 6, 7, 8]
 
@@ -23,8 +25,9 @@ def getNumCoord(pos):
     y = ord(pos[0].upper()) - 65
     return Coordinate(x, y)
 
-def addCoord(coordList, x, y):
-    coordList.append([x, y])
+def addInBoundsCoord(coordList, x, y):
+    if positionInGrid(x, y):
+        coordList.append(Coordinate(x, y))
 
 class Coordinate:
     '''

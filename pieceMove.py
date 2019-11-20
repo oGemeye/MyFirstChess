@@ -1,4 +1,4 @@
-from moveValidator import addCoord
+from moveValidator import addInBoundsCoord
 from grid import pieceAt, positionInGrid
 
 from math import sqrt
@@ -11,12 +11,10 @@ def canPieceMoveThere(piece, fromPos, toPos):
     pieceOrientation = getPieceOrientation(piece)
     legalMovesFunc = pieceMoveTypes(pieceType)
     legalMoves = legalMovesFunc(fromPos, toPos, pieceOrientation)
-    print(toPos)
-    print(legalMoves)
     return posInMoveset(toPos, legalMoves)
 
 def posInMoveset(pos, moveset):
-    return any(move[0] == pos.x and move[1] == pos.y for move in moveset)
+    return any(move.x == pos.x and move.y == pos.y for move in moveset)
 
 def getPieceOrientation(piece):
     """declares what we add to a piece's X coord to create legal moves
@@ -41,51 +39,53 @@ def calculateRookMoves(fromPos, toPos, direction):
     curY = fromPos.y
     tempY = 0
     while curX >= 0 and tempY < 8:
-        addCoord(legalMoves, curX, tempY)
+        addInBoundsCoord(legalMoves, curX, tempY)
         tempY += 1
 
     tempX = 0
     while curY >= 0 and tempX < 8:
-        addCoord(legalMoves, tempX, curY)
+        addInBoundsCoord(legalMoves, tempX, curY)
         tempX += 1
-    print('rook moves: ' + str(legalMoves))
-    return getMovesOnBoard(legalMoves)
+    return legalMoves
 
 def calculateKnightMoves(fromPos, toPos, direction):
+    '''use the definition of a circle,
+    with the knight's current position as the circle origin.
+    If the potential position is on the perimeter
+    of a radius sqrt(5) circle, then it's a valid knight move'''
     legalMoves = []
     curX = fromPos.x
     curY = fromPos.y
 
     for x in [curX-2, curX-1, curX+1, curX+2]:
         for y in [curY-2, curY-1, curY+1, curY+2]:
-            if positionInGrid(x, y) and ((x-curX)**2) + ((y-curY)**2) == 5:
-                addCoord(legalMoves, x, y)
+            originX = x-curX
+            originY = y-curY
+            if (originX**2) + (originY**2) == 5:
+                addInBoundsCoord(legalMoves, x, y)
 
     return legalMoves
 
 def calculateBishopMoves(fromPos, toPos, direction):
     legalMoves = []
-    curX = fromPos[0]
-    curY = fromPos[1]
+    curX = fromPos.x
+    curY = fromPos.y
     for i in range(1, 7):
-        addCoord(legalMoves, curX+i, curY+i)
-        addCoord(legalMoves, curX+i, curY-i)
-        addCoord(legalMoves, curX-i, curY+i)
-        addCoord(legalMoves, curX-i, curY-i)
-
-    boardMoves = getMovesOnBoard(legalMoves)
-    print('Bishop moves: ' + str(boardMoves))
-    return boardMoves
+        addInBoundsCoord(legalMoves, curX+i, curY+i)
+        addInBoundsCoord(legalMoves, curX+i, curY-i)
+        addInBoundsCoord(legalMoves, curX-i, curY+i)
+        addInBoundsCoord(legalMoves, curX-i, curY-i)
+    return legalMoves
 
 def calculateQueenMoves(fromPos, toPos, direction):
     legalMoves = calculateRookMoves(fromPos, toPos, direction)
     legalMoves.extend(calculateBishopMoves(fromPos, toPos, direction))
-    return getMovesOnBoard(legalMoves)
+    return legalMoves
 
 def calculateKingMoves(fromPos, toPos, direction):
     legalMoves = calculateQueenMoves(fromPos, toPos, direction)
     kinglyMoves = [move for move in legalMoves if isOneAway(fromPos, move)]
-    return getMovesOnBoard(kinglyMoves)
+    return kinglyMoves
 
 def isOneAway(fro, to):
     toX = to[0]
@@ -100,8 +100,5 @@ def isOneAway(fro, to):
 def calculatePrawnMoves(fromPos, toPos, direction):
     """TODO: include en passant and special diagonal pawn capture, and excluse pawn frontways capture"""
     legalMoves = []
-    addCoord(legalMoves, fromPos.x, fromPos.y + direction)
+    addInBoundsCoord(legalMoves, fromPos.x, fromPos.y + direction)
     return legalMoves
-
-def getMovesOnBoard(moveSet):
-    return [move for move in moveSet if positionInGrid(move)]

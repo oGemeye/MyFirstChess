@@ -15,3 +15,4 @@ Current goal: backend complete
     -   add advanced moves like en pessante (how spell this shit), castling, pawn to queen swap
     -   remove messy global variables from pieceController.py
     -   refactor the coordinate system - it's really confusing right now
+    -   stop pieces moving over other moves
