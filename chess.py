@@ -18,7 +18,9 @@ def doATurnAndCheckGameOver():
     return isGameOver()
 
 def logAndReportMove(fromPos, toPos):
-    newLog = f'T{getCurrentTurn()}, {getCurrentPlayerString()}: {fromPos} -> {toPos}'
+    turn = getCurrentTurn()
+    player = getCurrentPlayerString()
+    newLog = f'T{turn}, {player}: {fromPos} -> {toPos}'
     print(newLog)
     logMove(newLog)
 

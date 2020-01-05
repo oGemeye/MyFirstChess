@@ -1,22 +1,23 @@
-from grid import positionInGrid
+from grid import positionInGrid, Coordinate
 
 validLetters = ["A", "B", "C", "D", "E", "F", "G", "H"]
 validNumbers = [1, 2, 3, 4, 5, 6, 7, 8]
 
-def validCoord(pos):
-    if (pos[0].upper() in validLetters
+def validCoord(pos :Command):
+    if (pos.Letter in validLetters
         and
-        pos[1] in validNumbers):
+        pos.Number in validNumbers):
         return True
     return False
 
 def validInput(move):
+    '''Validates input straight from stdin'''
     return move[0] in validLetters and int(move[1]) in validNumbers and len(move) == 2
 
 def convertToCoord(move):
     '''converts a sanitised move-request string
     into a tuple in the form (CHAR, INT)'''
-    return (move[0], int(move[1]))
+    return Command(move[0], int(move[1]))
 
 def getNumCoord(pos):
     """converts (Letter, Number) pos into (num, num) coord
@@ -25,22 +26,20 @@ def getNumCoord(pos):
     y = ord(pos[0].upper()) - 65
     return Coordinate(x, y)
 
-def addInBoundsCoord(coordList, x, y):
-    if positionInGrid(x, y):
-        coordList.append(Coordinate(x, y))
-
-class Coordinate:
+class Command:
     '''
-    A Coordinate is defined as an (x, y) pair.
-    The x value represents the horizontal axis
-    The y value represents the vertical axis
+    A Command is created by a player
+    It is basically the same as a Coordinate, but in the form
+    (Letter, Number)
+    The Letter represents the horizontal axis
+    The Number represents the vertical axis
     '''
-    x = 0
-    y = 0
+    Letter = ""
+    Number = -1
 
-    def __init__(self, x=0, y=0):
-        self.x = x
-        self.y = y
+    def __init__(self, x, y):
+        self.Letter = x.upper()
+        self.Number = y
     
     def __str__(self):
-        return f'({self.x}, {self.y})'
+        return f'({self.Letter}, {self.Number})'

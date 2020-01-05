@@ -39,7 +39,7 @@ def movePiece(fromPosExternal, toPosExternal):
     """at this point we know that a valid piece was chosen to be moved, now we find out if we can"""
 
     if (not isValidMove(moveMe, fromCoord, toCoord)):
-        print("move wont work")
+        print("move not legal or valid, probably just not legal")
         return False
     
     """at this point, we know we're looking at a piece to move,

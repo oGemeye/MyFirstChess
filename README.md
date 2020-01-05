@@ -9,6 +9,7 @@ todo list
 2. add a front end
 3. do it with as much functional programming as possible (with loop for input)
 4. add a UI for the functional version
+5. add an AI player
 
 Current goal: backend complete
     -   add a nicer log, should include what piece moved, where it went, if it ate a piece
@@ -16,3 +17,5 @@ Current goal: backend complete
     -   remove messy global variables from pieceController.py
     -   refactor the coordinate system - it's really confusing right now
     -   stop pieces moving over other moves
+    -   refactor player logic into a player class to capture that logic - players have an ID, a direction of play, their own custom back and frontrow values, etc
+    -   ADD TESTS!!!!!

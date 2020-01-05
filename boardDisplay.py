@@ -1,6 +1,8 @@
-from grid import pieceAt
+from grid import pieceAt, getTopPlayer, getBottomPlayer
 
 def printBoard(board):
+    printPlayer(getTopPlayer())
+
     printHeader()
     for y in range(8):
         printSider(y)
@@ -8,6 +10,15 @@ def printBoard(board):
             printFromBoard(board, x, y)
         print('')
         printHorizontalSection()
+    
+    printPlayer(getBottomPlayer())
+
+def printPlayer(player):
+    for i in range(19):
+        print(' ', end="")
+    print('-[', end="")
+    print(player, end="")
+    print(']-')
 
 def printHeader():
     letters = ["1", "2", "3", "4", "5", "6", "7", "8"]

@@ -1,4 +1,4 @@
-from moveValidator import validInput, convertToCoord
+from moveValidator import validInput, convertToCoord, Command
 
 def requestTurn(currentTurn, currentPlayerString):
     print(f'Turn {currentTurn}: {currentPlayerString}')
