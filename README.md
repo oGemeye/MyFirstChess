@@ -9,6 +9,8 @@ todo list
 2. add a front end
 3. do it with as much functional programming as possible (with loop for input)
 4. add a UI for the functional version
+5. 
+6. tetris99 knockoff: BlitzChess64
 
 Current goal: backend complete
     -   add a nicer log, should include what piece moved, where it went, if it ate a piece
